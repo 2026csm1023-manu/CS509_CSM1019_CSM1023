@@ -11,11 +11,7 @@ vector<int> sssp(const CSR& csr, int source)
 
     vector<int> distance(n, INT_MAX);
 
-    priority_queue<
-        pair<int, int>,
-        vector<pair<int, int>>,
-        greater<pair<int, int>>
-    > pq;
+    priority_queue<pair<int, int>,vector<pair<int, int>>,greater<pair<int, int>>> pq;
 
     distance[source] = 0;
     pq.push({0, source});
