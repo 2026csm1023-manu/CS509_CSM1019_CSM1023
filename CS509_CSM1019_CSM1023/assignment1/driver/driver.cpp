@@ -136,12 +136,17 @@ void run_test(string filepath, string algorithm)
 
     double execution_time;
 
+    // Create output filename
+    string filename = filesystem::path(filepath).stem().string();
+    string output_file = "test_output/" + filename + "_output.txt";
+
+
     if(algorithm == "bfs")
     {
     start_timer();
     BFSResult result = bfs(csr, input.source);
     execution_time = stop_timer();
-    print_bfs(input.source, result, execution_time);
+    print_bfs(input.source, result, execution_time,output_file);
     }
 
     else if(algorithm == "dfs")
@@ -149,7 +154,7 @@ void run_test(string filepath, string algorithm)
     start_timer();
     vector<int> result = dfs(csr, input.source);
     execution_time = stop_timer();
-    print_dfs(input.source, result, execution_time);
+    print_dfs(input.source, result, execution_time,output_file);
     }
 
     else if(algorithm == "sssp")
@@ -157,7 +162,7 @@ void run_test(string filepath, string algorithm)
     start_timer();
     vector<int> distance = sssp(csr, input.source);
     execution_time = stop_timer();
-    print_sssp(input.source, distance, execution_time);
+    print_sssp(input.source, distance, execution_time,output_file);
     }
 
     file.close();
