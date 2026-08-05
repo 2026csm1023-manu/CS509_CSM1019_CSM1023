@@ -78,11 +78,10 @@ int main()
 }
 
 
-
+//Runs one test file of algorithm choosen and filename provided
 void run_one_test(string algorithm)
 {
     string filename;
-
     cout << "Enter test filename: ";
     cin >> filename;
 
@@ -90,7 +89,7 @@ void run_one_test(string algorithm)
 }
 
 
-// Run all test files belonging to selected algorithm
+//Runs all test files belonging to selected algorithm
 void run_all_tests(string algorithm)
 {
     filesystem::directory_iterator files("tests");
@@ -107,6 +106,7 @@ void run_all_tests(string algorithm)
     }
 }
 
+//Function to run 1 selected test and algorithm
 void run_test(string filepath, string algorithm)
 {
     ifstream file;
@@ -130,17 +130,28 @@ void run_test(string filepath, string algorithm)
     cout << "\nRunning: "<< filesystem::path(filepath).filename()<< endl;
 
 
-    // Convert adjacency list to CSR
-    // This is preprocessing, so it is NOT timed
+    //Converting adjacency list to CSR
+    //This is preprocessing, so it is NOT timed
     CSR csr = make_csr(input.graph);
 
     double execution_time;
 
-    // Create output filename
+    //Creating output filename which will store the test output
     string filename = filesystem::path(filepath).stem().string();
+
+    //File name which will store the output
     string output_file = "test_output/" + filename + "_output.txt";
 
 
+    /*
+    1. Timer is started
+    2. Algorithm running
+    3. Timer stopped, execution time calculated
+    4. Output is saved in test_output folder
+    */
+
+
+    //Runs BFS algorithm
     if(algorithm == "bfs")
     {
     start_timer();
@@ -149,6 +160,7 @@ void run_test(string filepath, string algorithm)
     print_bfs(input.source, result, execution_time,output_file);
     }
 
+    //Runs DFS algorithm
     else if(algorithm == "dfs")
     {
     start_timer();
@@ -157,6 +169,7 @@ void run_test(string filepath, string algorithm)
     print_dfs(input.source, result, execution_time,output_file);
     }
 
+    //Runs SSSP algorithm
     else if(algorithm == "sssp")
     {
     start_timer();

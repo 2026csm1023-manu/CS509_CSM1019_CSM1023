@@ -1,0 +1,15 @@
+Algorithm: BFS
+Source: 0
+Traversal: 0 1 2 3 4 5 9 6 7 8 
+Distances:
+0 0
+1 1
+2 1
+3 1
+4 1
+5 1
+6 1
+7 2
+8 2
+9 1
+Execution time: 0.0049 ms

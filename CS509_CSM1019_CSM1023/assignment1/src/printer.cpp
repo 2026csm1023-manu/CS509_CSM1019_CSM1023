@@ -5,8 +5,7 @@
 
 using namespace std;
 
-void print_bfs(int source, const BFSResult& result,
-               double execution_time, string output_file)
+void print_bfs(int source, const BFSResult& result,double execution_time, string output_file)
 {
     ofstream out(output_file);
 
@@ -14,14 +13,15 @@ void print_bfs(int source, const BFSResult& result,
     out << "Source: " << source << "\n";
     out << "Traversal: ";
 
-    for(int v : result.traversal)
+    //print all traversal value
+    for(int v: result.traversal)
     {
-        out << v << " ";
+        out<< v << " ";
     }
 
-    out << "\nDistances:\n";
+    out<<"\nDistances:\n";
 
-    for(int i = 0; i < result.distance.size(); i++)
+    for(int i=0; i<result.distance.size(); i++)
     {
         out << i << " ";
 
@@ -31,14 +31,13 @@ void print_bfs(int source, const BFSResult& result,
             out << result.distance[i] << "\n";
     }
 
-    out << "Execution time: " << execution_time << " ms\n";
+    out<<"Execution time: " << execution_time << " ms\n";
 
     out.close();
 }
 
 
-void print_dfs(int source, const vector<int>& result,
-               double execution_time, string output_file)
+void print_dfs(int source, const vector<int>& result,double execution_time, string output_file)
 {
     ofstream out(output_file);
 
@@ -48,7 +47,7 @@ void print_dfs(int source, const vector<int>& result,
 
     for(int v : result)
     {
-        out << v << " ";
+        out<<v << " ";
     }
 
     out << "\n";
@@ -58,8 +57,7 @@ void print_dfs(int source, const vector<int>& result,
 }
 
 
-void print_sssp(int source, const vector<int>& distance,
-                double execution_time, string output_file)
+void print_sssp(int source, const vector<int>& distance,double execution_time, string output_file)
 {
     ofstream out(output_file);
 
@@ -67,14 +65,14 @@ void print_sssp(int source, const vector<int>& distance,
     out << "Source: " << source << "\n";
     out << "Vertex Distance\n";
 
-    for(int i = 0; i < distance.size(); i++)
+    for(int i=0; i<distance.size(); i++)
     {
-        out << i << " ";
+        out<< i << " ";
 
-        if(distance[i] == INT_MAX)
-            out << "INF\n";
+        if(distance[i]== INT_MAX)
+            out<< "INF\n";
         else
-            out << distance[i] << "\n";
+            out<< distance[i] << "\n";
     }
 
     out << "Execution time: " << execution_time << " ms\n";

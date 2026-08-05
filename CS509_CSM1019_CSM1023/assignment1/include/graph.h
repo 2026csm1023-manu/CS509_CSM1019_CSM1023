@@ -14,7 +14,7 @@ struct GraphInput
     int source;
 };
 
-// Reads graph + SOURCE from an already opened file
+//Filepath is provided, txt file is converted into Graph as per algorithm selected.
 bool read_graph(ifstream& file, string algorithm, GraphInput& input);
 
 #endif

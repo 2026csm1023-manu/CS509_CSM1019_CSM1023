@@ -1,0 +1,4 @@
+Algorithm: DFS
+Source: 0
+Traversal: 0 1 9 2 6 4 3 7 8 5 
+Execution time: 0.0067 ms
