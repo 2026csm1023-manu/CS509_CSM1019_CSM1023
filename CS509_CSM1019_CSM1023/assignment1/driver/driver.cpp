@@ -3,7 +3,6 @@
 #include <vector>
 #include <string>
 #include <filesystem>
-#include <chrono>
 #include "timer.h"
 
 #include "../include/graph.h"
@@ -11,6 +10,7 @@
 #include "../include/bfs.h"
 #include "../include/dfs.h"
 #include "../include/sssp.h"
+#include "../include/printer.h"
 
 using namespace std;
 
@@ -18,26 +18,6 @@ using namespace std;
 void run_one_test(string algorithm);
 void run_all_tests(string algorithm);
 void run_test(string filepath, string algorithm);
-bool validate(ifstream &file);
-
-
-void bfs()
-{
-    cout << "BFS will run here\n";
-}
-
-void dfs()
-{
-    cout << "DFS will run here\n";
-}
-
-void sssp()
-{
-    cout << "SSSP will run here\n";
-}
-
-
-
 
 
 int main()
@@ -57,15 +37,15 @@ int main()
 
     if(algorithm_choice==1)
     {
-        algorithm= "BFS";
+        algorithm= "bfs";
     }
     else if(algorithm_choice==2)
     {
-        algorithm= "DFS";
+        algorithm= "dfs";
     }
     else if(algorithm_choice==3)
     {
-        algorithm= "SSSP";
+        algorithm= "sssp";
     }
     else
     {
@@ -139,99 +119,10 @@ void run_test(string filepath, string algorithm)
     }
 
 
-    int V, E;
-
-    file >> V >> E;
-
-    if(file.fail() || V<= 0 || E< 0)
+    //Convert test text file into Graph 
+    GraphInput input;
+    if(!read_graph(file, algorithm, input))
     {
-        cout << "Error: Invalid test file\n";
-        return;
-    }
-
-
-    //Adjacency list
-    vector<vector<Edge>> graph(V);
-
-
-    //Read adjacency list for all vertices
-    for(int i = 0; i < V; i++)
-    {
-        int vertex;
-        int degree;
-
-        file >> vertex >> degree;
-
-        if(file.fail() || vertex < 0 || vertex >= V || degree < 0)
-        {
-            cout << "Error: Invalid graph data\n";
-            return;
-        }
-
-
-        // BFS and DFS - unweighted graph
-        if(algorithm == "BFS" || algorithm == "DFS")
-        {
-            for(int j = 0; j < degree; j++)
-            {
-                int neighbour;
-
-                file >> neighbour;
-
-                if(file.fail() || neighbour < 0 || neighbour >= V)
-                {
-                    cout << "Error: Invalid neighbour\n";
-                    return;
-                }
-
-
-                Edge edge;
-
-                edge.neighbour = neighbour;
-                edge.weight = 1;
-
-                graph[vertex].push_back(edge);
-            }
-        }
-
-
-        // SSSP - weighted graph
-        else if(algorithm == "SSSP")
-        {
-            for(int j = 0; j < degree; j++)
-            {
-                int neighbour;
-                int weight;
-
-                file >> neighbour >> weight;
-
-                if(file.fail() || neighbour < 0 || neighbour >= V || weight <= 0)
-                {
-                    cout << "Error: Invalid edge\n";
-                    return;
-                }
-
-
-                Edge edge;
-
-                edge.neighbour = neighbour;
-                edge.weight = weight;
-
-                graph[vertex].push_back(edge);
-            }
-        }
-    }
-
-
-    // Read SOURCE
-    string source_word;
-    int source;
-
-    file >> source_word >> source;
-
-    if(file.fail() || source_word != "SOURCE" || source < 0 || source >= V)
-    {
-        cout << "Error: Invalid source\n";
         return;
     }
 
@@ -241,53 +132,35 @@ void run_test(string filepath, string algorithm)
 
     // Convert adjacency list to CSR
     // This is preprocessing, so it is NOT timed
-    CSR csr = make_csr(graph);
+    CSR csr = make_csr(input.graph);
 
     double execution_time;
 
-    if(algorithm == "BFS")
+    if(algorithm == "bfs")
     {
-        start_timer();
-        bfs();       // later: bfs(csr, source)
-        execution_time = stop_timer();
+    start_timer();
+    BFSResult result = bfs(csr, input.source);
+    execution_time = stop_timer();
+    print_bfs(input.source, result, execution_time);
     }
 
-    else if(algorithm == "DFS")
+    else if(algorithm == "dfs")
     {
-        start_timer();
-        dfs();       // later: dfs(csr, source)
-        execution_time = stop_timer();
+    start_timer();
+    vector<int> result = dfs(csr, input.source);
+    execution_time = stop_timer();
+    print_dfs(input.source, result, execution_time);
     }
 
-    else if(algorithm == "SSSP")
+    else if(algorithm == "sssp")
     {
-        start_timer();
-        sssp();      // later: sssp(csr, source)
-        execution_time = stop_timer();
+    start_timer();
+    vector<int> distance = sssp(csr, input.source);
+    execution_time = stop_timer();
+    print_sssp(input.source, distance, execution_time);
     }
 
-
-    cout << "Execution time: "<< execution_time << " ms\n";
     file.close();
 
 }
 
-// Basic validation for now
-bool validate(ifstream &file)
-{
-    int V,E;
-
-    file >> V >> E;
-
-    if(file.fail())
-    {
-        return false;
-    }
-
-    if(V<=0 || E<0)
-    {
-        return false;
-    }
-
-    return true;
-}
