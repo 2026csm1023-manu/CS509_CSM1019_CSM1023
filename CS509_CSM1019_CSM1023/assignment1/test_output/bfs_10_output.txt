@@ -12,4 +12,4 @@ Distances:
 7 2
 8 2
 9 1
-Execution time: 0.0049 ms
+Execution time: 0 ms

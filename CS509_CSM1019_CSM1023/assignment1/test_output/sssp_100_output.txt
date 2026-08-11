@@ -101,4 +101,4 @@ Vertex Distance
 97 27
 98 24
 99 22
-Execution time: 0.0712 ms
+Execution time: 0 ms

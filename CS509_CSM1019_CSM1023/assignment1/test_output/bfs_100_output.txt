@@ -102,4 +102,4 @@ Distances:
 97 2
 98 4
 99 3
-Execution time: 0.0254 ms
+Execution time: 0 ms

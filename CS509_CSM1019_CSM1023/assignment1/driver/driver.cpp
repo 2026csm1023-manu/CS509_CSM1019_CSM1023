@@ -2,7 +2,7 @@
 #include <fstream>
 #include <vector>
 #include <string>
-#include <filesystem>
+#include <windows.h>
 #include "timer.h"
 
 #include "../include/graph.h"
@@ -18,6 +18,19 @@ using namespace std;
 void run_one_test(string algorithm);
 void run_all_tests(string algorithm);
 void run_test(string filepath, string algorithm);
+
+string filename_from_path(const string& filepath)
+{
+    size_t slash = filepath.find_last_of("\\\\/");
+    return slash == string::npos ? filepath : filepath.substr(slash + 1);
+}
+
+string stem_from_path(const string& filepath)
+{
+    string filename = filename_from_path(filepath);
+    size_t dot = filename.find_last_of('.');
+    return dot == string::npos ? filename : filename.substr(0, dot);
+}
 
 
 int main()
@@ -92,18 +105,27 @@ void run_one_test(string algorithm)
 //Runs all test files belonging to selected algorithm
 void run_all_tests(string algorithm)
 {
-    filesystem::directory_iterator files("tests");
-
-    for(auto file : files)
+    WIN32_FIND_DATAA file_data;
+    HANDLE search = FindFirstFileA("tests\\\\*", &file_data);
+    if(search == INVALID_HANDLE_VALUE)
     {
-        string filename = file.path().filename().string();
+        cout << "Error: Could not open tests directory\n";
+        return;
+    }
+
+    do
+    {
+        string filename = file_data.cFileName;
 
         // Only run files belonging to selected algorithm
-        if(filename.find(algorithm + "_") == 0)
+        if(!(file_data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
+           filename.find(algorithm + "_") == 0)
         {
-            run_test(file.path().string(), algorithm);
+            run_test("tests/" + filename, algorithm);
         }
-    }
+    } while(FindNextFileA(search, &file_data));
+
+    FindClose(search);
 }
 
 //Function to run 1 selected test and algorithm
@@ -127,7 +149,7 @@ void run_test(string filepath, string algorithm)
     }
 
 
-    cout << "\nRunning: "<< filesystem::path(filepath).filename()<< endl;
+    cout << "\nRunning: " << filename_from_path(filepath) << endl;
 
 
     //Converting adjacency list to CSR
@@ -137,7 +159,7 @@ void run_test(string filepath, string algorithm)
     double execution_time;
 
     //Creating output filename which will store the test output
-    string filename = filesystem::path(filepath).stem().string();
+    string filename = stem_from_path(filepath);
 
     //File name which will store the output
     string output_file = "test_output/" + filename + "_output.txt";

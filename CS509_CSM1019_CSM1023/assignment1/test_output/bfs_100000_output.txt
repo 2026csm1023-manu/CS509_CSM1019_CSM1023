@@ -100002,4 +100002,4 @@ Distances:
 99997 5
 99998 6
 99999 5
-Execution time: 20.0509 ms
+Execution time: 35.835 ms

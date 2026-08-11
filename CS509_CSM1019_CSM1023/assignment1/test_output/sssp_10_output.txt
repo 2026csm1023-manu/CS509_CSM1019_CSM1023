@@ -11,4 +11,4 @@ Vertex Distance
 7 16
 8 15
 9 11
-Execution time: 0.0058 ms
+Execution time: 0 ms
