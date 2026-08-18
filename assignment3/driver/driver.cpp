@@ -2,7 +2,6 @@
 #include<fstream>
 #include<string>
 #include<vector>
-#include<filesystem>
 
 #include "reader.h"
 #include "printer.h"
@@ -61,26 +60,20 @@ void run_one_test(int choice)
 
 void run_all_tests(int choice)
 {
-    try
-    {
-        for(const auto&entry:filesystem::directory_iterator("tests"))
-        {
-            if(entry.is_regular_file())
-            {
-                string filename=entry.path().filename().string();
+    vector<string> filenames;
 
-                if(choice==1&&filename.find("gd_")==0)
-                    run_test(entry.path().string(),choice);
-
-                if(choice==2&&filename.find("maxflow_")==0)
-                    run_test(entry.path().string(),choice);
-            }
-        }
-    }
-    catch(...)
+    if(choice==1)
     {
-        cout<<"Error: Could not open tests directory\n";
+        filenames={"gd_01.txt","gd_02.txt","gd_03.txt","gd_04.txt","gd_05.txt"};
     }
+    else
+    {
+        filenames={"maxflow_10.txt","maxflow_100.txt","maxflow_1000.txt",
+                   "maxflow_10000.txt","maxflow_50000.txt"};
+    }
+
+    for(const string& filename:filenames)
+        run_test("tests/"+filename,choice);
 }
 
 void run_test(string filepath,int choice)
