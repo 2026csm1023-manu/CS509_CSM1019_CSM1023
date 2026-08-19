@@ -4,4 +4,4 @@ Final x: approximately 0.000000
 Final f(x): approximately 0.000000
 Iterations: 948
 Converged: true
-Execution time: 0.000000 ms
+Execution time: 0.065200 ms
