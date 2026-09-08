@@ -4,7 +4,13 @@
 #include <random>
 #include <cmath>
 #include <iomanip>
-#include <filesystem>
+
+#ifdef _WIN32
+#include <direct.h>
+#else
+#include <sys/stat.h>
+#endif
+
 
 using namespace std;
 
@@ -93,7 +99,13 @@ void generate_fastmap(const string& filename, int N, int K)
 
 int main()
 {
-    filesystem::create_directories("tests");
+#ifdef _WIN32
+    _mkdir("tests");
+    _mkdir("outputs");
+#else
+    mkdir("tests",0755);
+    mkdir("outputs",0755);
+#endif
 
     generate_kmeans("km_01.txt",100,2,3);
     generate_kmeans("km_02.txt",1000,2,5);
